@@ -308,4 +308,18 @@ class OC_Template extends \OC\Template\Base {
 		}
 		self::printErrorPage($error_msg, $hint);
 	}
+
+	public static function printExceptionJson(Exception $exception){
+		$response = array(
+			'code' => $exception->getCode(),
+			'message' => $exception->getMessage()
+		);
+		if (defined('DEBUG') and DEBUG) {
+			$stack = array();
+			$stack[] = $exception->getTraceAsString();
+			// TODO: include causes	
+			$response['stack'] = $stack;
+		}
+		\OCP\JSON::encodedPrint($response);
+	}
 }

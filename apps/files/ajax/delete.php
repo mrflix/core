@@ -13,6 +13,9 @@ $files = isset($_POST["file"]) ? $_POST["file"] : $_POST["files"];
 $files = json_decode($files);
 $filesWithError = '';
 
+// FIXME TEMP
+throw new Exception('For testing');
+
 $success = true;
 
 //Now delete

@@ -1,4 +1,11 @@
-var FileList={
+(function(){
+function ajaxError(response){
+	var result = response.responseJSON;
+	console.error('Ajax call error: ', result);
+	OC.dialogs.exception(result.code, result.message, result.stack, true);
+}
+
+window.FileList={
 	useUndo:true,
 	postProcessList: function(){
 		$('#fileList tr').each(function(){
@@ -492,9 +499,11 @@ var FileList={
 		}
 
 		var fileNames = JSON.stringify(files);
-		$.post(OC.filePath('files', 'ajax', 'delete.php'),
-				{dir:$('#dir').val(),files:fileNames},
-				function(result){
+		$.ajax({
+			type: 'POST',
+			url: OC.filePath('files', 'ajax', 'delete.php'),
+			data: {dir:$('#dir').val(),files:fileNames},
+			success: function(result){
 					if (result.status == 'success') {
 						$.each(files,function(index,file){
 							var files = $('tr').filterAttr('data-file',file);
@@ -511,7 +520,9 @@ var FileList={
 							deleteAction.removeClass('progress-icon').addClass('delete-icon');
 						});
 					}
-				});
+				},
+			error: ajaxError
+		});
 	},
 	createFileSummary: function() {
 		if( $('#fileList tr').length > 0 ) {
@@ -951,3 +962,4 @@ $(document).ready(function(){
 
 	FileList.createFileSummary();
 });
+})();

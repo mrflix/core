@@ -220,6 +220,17 @@ var OCdialogs = {
 			}
 		});
 	},
+	exception: function(code, message, stack, serverError, callback){
+		var title = t('core', serverError ? 'Server error' : 'Error'),
+			content = t('core', 'The following error has occurred:') + '\n' + message;
+		if (stack){
+			content += 'Stack:\n';
+			for (var i = 0; i < stack.length; i++){
+				content += stack[i];
+			}
+		}
+		OCdialogs.message(content, title, 'error', OCdialogs.OK_BUTTON, callback, true);
+	},
 	_fileexistsshown: false,
 	/**
 	 * Displays file exists dialog
